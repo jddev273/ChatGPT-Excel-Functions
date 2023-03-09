@@ -24,6 +24,7 @@ These instructions may only apply to recent versions of Microsoft Windows. You w
 5. Replace `sk-YOUR-CHATGPT-KEY-HERE` with your own OpenAI API key.
 6. Use the `ChatGPT` function in a cell by typing `=ChatGPT(prompt)`, where `prompt` is the text you want to send to the ChatGPT API.
 7. The response from the ChatGPT API will be displayed in the cell where the function was used.
+8. You can type in =ChatGPTQuickFill() this will use the cell to the immediate left, and the top row to build a prompt (the top row must be a title for this to work correctly) you can pass in a number to use more rows to the left.
 
 ## Troubleshooting
 
