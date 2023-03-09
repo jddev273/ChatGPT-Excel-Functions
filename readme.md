@@ -7,7 +7,7 @@ A simple function for communicating with the OpenAI ChatGPT API in Microsoft Exc
 Added a ChatGPTQuickFill() function, you pass in the number of cells you want to look backward for on the fill (if the cells don't exist or are empty they are ignored).  No prompt engineering required, the prompt is engineered automatically.  
 
 Here's a demo video:
-![ChatGPT Quick Fill Video](https://img.youtube.com/vi/t9rUA67DV0E/0.jpg)](https://www.youtube.com/watch?v=t9rUA67DV0E)
+![ChatGPT Quick Fill Video](https://img.youtube.com/vi/t9rUA67DV0E/0.jpg)(https://www.youtube.com/watch?v=t9rUA67DV0E)
 
 ## Demo
 
