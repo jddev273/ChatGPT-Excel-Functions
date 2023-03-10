@@ -130,3 +130,19 @@ Function GetContext(Optional titleRow As Integer, Optional contextColumn As Inte
     GetContext = context_title & ": " & context_value & "\n" & title & ": "
     
 End Function
+
+Function ChatGPTList(topic As String, Optional horizontal As Boolean = False) As Variant
+    Dim prompt As String
+    Dim list As String
+    Dim arr() As String
+
+    prompt = "List values for topic.  Use no extra words or punctuation.  Be specific.  Never explain anything.  Each item in list will be in a new line without any formatting.\n\ntopic=3 largest countries in North America in land mass\nCanada\nUSA\nMexico\n\ntopic=5\nlargest cities on Mars\nUnknown\n\ntopic=founders of microsoft\nBill Gates\nPaul Allen\n\ntopic=" & topic
+    list = GetChatGPTResponse(prompt)
+    arr = Split(list, vbNewLine)
+    
+    If horizontal = False Then
+        ChatGPTList = Application.Transpose(arr)
+    Else
+        ChatGPTList = arr
+    End If
+End Function

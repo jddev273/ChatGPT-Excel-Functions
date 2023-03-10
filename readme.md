@@ -2,7 +2,11 @@
 
 A simple function for communicating with the OpenAI ChatGPT API in Microsoft Excel. This was tested under the latest version of Microsoft Excel. Adjustments may be needed to run with older versions.
 
-# Update
+# Update (3/9/2023)
+
+Added a ChatGPTList() function.  Pass in something you want a list of like in the video below, you can have the list output vertically and horizontally.
+
+# Update (3/8/223)
 
 Added a ChatGPTQuickFill() function, you pass in the number of cells you want to look backward for on the fill (if the cells don't exist or are empty they are ignored).  No prompt engineering required, the prompt is engineered automatically.  
 
