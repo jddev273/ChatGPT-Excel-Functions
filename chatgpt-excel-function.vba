@@ -1,4 +1,4 @@
-' This is a macro that will allow you to communicate with the ChatGPT API within an Excel cell
+' This is a set of functions that will allow you to communicate with the ChatGPT API within an Excel cell
 '
 'Just copy/paste this function into Excel following instructions in the Readme.md file.
 ' Don't forget to change the API key to your own.
