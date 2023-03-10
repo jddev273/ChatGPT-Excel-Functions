@@ -6,7 +6,10 @@ A simple function for communicating with the OpenAI ChatGPT API in Microsoft Exc
 
 Added a ChatGPTList() function.  Pass in something you want a list of like in the video below, you can have the list output vertically and horizontally.
 
-# Update (3/8/223)
+ChatGPTList demo:
+![ChatGPTList Video](https://img.youtube.com/vi/bLxEHdxFb9k/0.jpg)(https://www.youtube.com/watch?v=bLxEHdxFb9k)
+
+# Update (3/8/2023)
 
 Added a ChatGPTQuickFill() function, you pass in the number of cells you want to look backward for on the fill (if the cells don't exist or are empty they are ignored).  No prompt engineering required, the prompt is engineered automatically.  
 
@@ -31,7 +34,9 @@ These instructions may only apply to recent versions of Microsoft Windows. You w
 
 Prompt chatGPT in a cell by typing `=ChatGPT(prompt)`, where `prompt` is the text you want to send to the ChatGPT API.
 
-Quick fill cells without a prompt using `=ChatGPTQuickFill(optional titleCell, optional contextCell)` where title row and context row default to row 1, and column a.  A prompt will be automatically generated.
+Quick fill cells using ChatGPT without a prompt using `=ChatGPTQuickFill(optional titleCell, optional contextCell)` where title row and context row default to row 1, and column a.  A prompt will be automatically generated.
+
+Insert lists with ChatGPT using `=ChatGPTList(topic, optional horizontal)` The list will be created based on the passed in topic, by default the list will be placed vertically.  
 
 ## Troubleshooting
 

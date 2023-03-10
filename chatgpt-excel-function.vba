@@ -75,6 +75,10 @@ Function GetChatGPTResponse(prompt As String) As String
     Set httpRequest = Nothing
 End Function
 
+Function ChatGPT(prompt As String) As String
+    ChatGPT = GetChatGPTResponse(prompt)
+End Function
+
 Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contextCell As Range = Nothing) As String
     Dim result As String
     Dim currentCell As Range
