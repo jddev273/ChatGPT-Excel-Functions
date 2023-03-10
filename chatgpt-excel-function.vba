@@ -75,64 +75,65 @@ Function GetChatGPTResponse(prompt As String) As String
     Set httpRequest = Nothing
 End Function
 
-Function ArrangedValues(ByVal numColsLeft As Integer) As String
-    Dim rowOffset As Integer, colOffset As Integer
-    Dim result As String
-    Dim row As String
-    Dim currentCell As Range
-    Dim currentElement As String
-    
-    Set currentCell = Application.Caller
-      
-    rowOffset = 0
-    colOffset = 0
-
-    result = ""
-    If currentCell.row > 0 Then
-        Dim maxColumn As Integer
-        maxColumn = ActiveSheet.Columns.Count
-        If currentCell.Column - numColsLeft < 1 Then
-            numColsLeft = currentCell.Column - 1
-        End If
-        For j = -numColsLeft To 0
-            Dim firstRowCell As Range
-            Set firstRowCell = Cells(1, currentCell.Column + j)
-            
-            If Not IsEmpty(firstRowCell) And Not IsError(firstRowCell) Then
-                currentElement = (firstRowCell.Value)
-                If j <> 0 Then
-                    Dim valueCell As String
-                    On Error Resume Next
-                    valueCell = Cells(currentCell.row, currentCell.Column + j).Value
-                    If Err.Number = 0 Then
-                        currentElement = currentElement & ": " & valueCell & "\n"
-                    End If
-                    On Error GoTo 0
-                End If
-                row = currentElement
-            End If
-            result = result & row
-        Next j
-    End If
-    
-    result = result & ": "
-    
-    ArrangedValues = result
-End Function
-
-Function ChatGPTQuickFill(Optional numColsLeft As Integer = 1) As String
+Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contextCell As Range = Nothing) As String
     Dim result As String
     Dim currentCell As Range
     Set currentCell = Application.Caller
     Dim prompt As String
+    Dim titleRow As Integer
+    Dim contextColumn As Integer
     
-    result = ArrangedValues(numColsLeft)
+    Debug.Print ("Here")
+    
+    ' Set default values for titleRow and contextColumn
+    If titleCell Is Nothing Then
+        titleRow = 1
+    Else
+        titleRow = title.row
+    End If
+    
+    If contextCell Is Nothing Then
+        contextColumn = 1
+    Else
+        contextColumn = context.Column
+    End If
+    
+    result = GetContext(titleRow, contextColumn)
+    
+    Debug.Print result
 
-    prompt = "Provide {missing} value.  Use no extra words or punctuation.\n\n"
+    prompt = "Provide {missing} value.  Use no extra words or punctuation.  Be specific.  Never explain anything.\n\n"
     prompt = prompt & "Country: Canada\nCapital: {missing}\nmissing=Ottawa\n\nPlanet: Mars\nCapital: {missing}\nmissing=Unknown\n\nCompany: Tesla\nTicker Symbol: {missing}\nmissing=TSLA\n\n"
     prompt = prompt & result & "{missing}\nmissing="
 
     result = GetChatGPTResponse(prompt)
     
     ChatGPTQuickFill = result
+End Function
+
+Function GetContext(Optional titleRow As Integer, Optional contextColumn As Integer) As String
+    
+    ' Get the active cell
+    Dim activeCell As Range
+    Set activeCell = Application.Caller
+    
+    Debug.Print ("HI")
+    
+    ' Get the title
+    Dim title As String
+    title = Cells(titleRow, activeCell.Column).Value
+    
+    Debug.Print title
+    
+    ' Get the context title
+    Dim context_title As String
+    context_title = Cells(titleRow, contextColumn).Value
+    
+    ' Get the context value
+    Dim context_value As String
+    context_value = Cells(activeCell.row, contextColumn).Value
+    
+    ' Return the results as a variant array
+    GetContext = context_title & ": " & context_value & "\n" & title & ": "
+    
 End Function
