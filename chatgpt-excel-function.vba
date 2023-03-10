@@ -83,8 +83,6 @@ Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contex
     Dim titleRow As Integer
     Dim contextColumn As Integer
     
-    Debug.Print ("Here")
-    
     ' Set default values for titleRow and contextColumn
     If titleCell Is Nothing Then
         titleRow = 1
@@ -99,8 +97,7 @@ Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contex
     End If
     
     result = GetContext(titleRow, contextColumn)
-    
-    Debug.Print result
+
 
     prompt = "Provide {missing} value.  Use no extra words or punctuation.  Be specific.  Never explain anything.\n\n"
     prompt = prompt & "Country: Canada\nCapital: {missing}\nmissing=Ottawa\n\nPlanet: Mars\nCapital: {missing}\nmissing=Unknown\n\nCompany: Tesla\nTicker Symbol: {missing}\nmissing=TSLA\n\n"
@@ -117,13 +114,9 @@ Function GetContext(Optional titleRow As Integer, Optional contextColumn As Inte
     Dim activeCell As Range
     Set activeCell = Application.Caller
     
-    Debug.Print ("HI")
-    
     ' Get the title
     Dim title As String
     title = Cells(titleRow, activeCell.Column).Value
-    
-    Debug.Print title
     
     ' Get the context title
     Dim context_title As String
