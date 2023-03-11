@@ -34,7 +34,7 @@ Function UnescapeString(ByVal str As String) As String
 End Function
 
 
-Function GetChatGPTResponse(prompt As String) As String
+Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) As String
     Dim apiUrl As String
     Dim requestPayload As String
     Dim apiKey As String
@@ -51,6 +51,12 @@ Function GetChatGPTResponse(prompt As String) As String
     model = "gpt-3.5-turbo"
     temperature = "0.5"
     maxTokens = 50
+    
+    ' Encode the prompt if needed
+    If encodeString = True Then
+        prompt = JsonEncode(prompt)
+    End If
+
 
     ' Build the payload string
     requestPayload = "{""model"":""" & model & """,""messages"":[{""role"":""system"",""content"":""""},{""role"":""user"",""content"":""" & prompt & """}],""temperature"":" & temperature & ",""max_tokens"":" & maxTokens & "}"
@@ -75,8 +81,8 @@ Function GetChatGPTResponse(prompt As String) As String
     Set httpRequest = Nothing
 End Function
 
-Function ChatGPT(prompt As String) As String
-    ChatGPT = GetChatGPTResponse(prompt)
+Function ChatGPT(prompt As String, Optional encodeString As Boolean = False) As String
+    ChatGPT = GetChatGPTResponse(prompt, encodeString)
 End Function
 
 Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contextCell As Range = Nothing) As String
@@ -107,7 +113,7 @@ Function ChatGPTQuickFill(Optional titleCell As Range = Nothing, Optional contex
     prompt = prompt & "Country: Canada\nCapital: {missing}\nmissing=Ottawa\n\nPlanet: Mars\nCapital: {missing}\nmissing=Unknown\n\nCompany: Tesla\nTicker Symbol: {missing}\nmissing=TSLA\n\n"
     prompt = prompt & result & "{missing}\nmissing="
 
-    result = GetChatGPTResponse(prompt)
+    result = ChatGPT(prompt)
     
     ChatGPTQuickFill = result
 End Function
@@ -141,7 +147,7 @@ Function ChatGPTList(topic As String, Optional horizontal As Boolean = False) As
     Dim arr() As String
 
     prompt = "List values for topic.  Use no extra words or punctuation.  Be specific.  Never explain anything.  Each item in list will be in a new line without any formatting.\n\ntopic=3 largest countries in North America in land mass\nCanada\nUSA\nMexico\n\ntopic=5\nlargest cities on Mars\nUnknown\n\ntopic=founders of microsoft\nBill Gates\nPaul Allen\n\ntopic=" & topic
-    list = GetChatGPTResponse(prompt)
+    list = ChatGPT(prompt)
     arr = Split(list, vbNewLine)
     
     If horizontal = False Then
@@ -149,4 +155,80 @@ Function ChatGPTList(topic As String, Optional horizontal As Boolean = False) As
     Else
         ChatGPTList = arr
     End If
+End Function
+
+Public Function ExcelToJSON(rng As Range, Optional isHeader As Boolean = True) As String
+    ' modified from tutorial at https://www.javatpoint.com/convert-excel-to-json-using-vba-code
+    On Error GoTo ErrorHandler
+    
+    'Declare all variables explicitly
+    Dim dataLoop As Long, colLoop As Long, colCount As Long
+    Dim json As String, jsonData As String
+    
+    'Count the number of columns of targeted Excel file
+    colCount = rng.Columns.Count
+    
+    'Create the JSON string
+    json = "["
+    For dataLoop = IIf(isHeader, 2, 1) To rng.rows.Count
+        jsonData = "{"
+        For colLoop = 1 To colCount
+            If isHeader Then
+                jsonData = jsonData & """" & rng.cells(1, colLoop).value & """" & ":"
+            Else
+                jsonData = jsonData & """" & "Column" & colLoop & """" & ":"
+            End If
+            jsonData = jsonData & """" & rng.cells(dataLoop, colLoop).value & """"
+            jsonData = jsonData & ","
+        Next colLoop
+        jsonData = Left(jsonData, Len(jsonData) - 1) 'Strip out the comma in last value of each row
+        json = json & jsonData & "},"
+    Next dataLoop
+    json = Left(json, Len(json) - 1) 'Strip out the last comma in last row of the Excel data
+    json = json & "]"
+    ExcelToJSON = json
+    
+    Exit Function
+
+ErrorHandler:
+    ExcelToJSON = "Error: " & Err.Description
+End Function
+
+Function JsonEncode(ByVal str As String) As String
+    Dim i As Long
+    Dim c As String
+    Dim result As String
+    
+    result = ""
+    
+    For i = 1 To Len(str)
+        c = Mid(str, i, 1)
+        
+        Select Case c
+            Case """"
+                result = result & "\""" ' Escape double quotes
+            Case "\", "/"
+                result = result & "\\" & c ' Escape backslashes and forward slashes
+            Case vbCr
+                result = result & "\r" ' Replace carriage return with \r
+            Case vbLf
+                result = result & "\n" ' Replace line feed with \n
+            Case vbTab
+                result = result & "\t" ' Replace tab with \t
+            Case Else
+                result = result & c
+        End Select
+    Next i
+    
+    JsonEncode = result
+End Function
+
+Public Function ChatGPTQuerySelection(query As String, rng As Range, Optional isHeader As Boolean = True) As String
+    Dim json As String
+    Dim prompt As String
+    
+    json = ExcelToJSON(rng, isHeader)
+
+    prompt = "Answer this query based on the given {JSON}. Be specific, especially about numbers. Assume the end client has no technical knowledge and is not looking at the data.  Do not mention anything about JSON or the format of the table. QUERY=" & query & "\nJSON=" & json
+    ChatGPTQuerySelection = ChatGPT(prompt, True)
 End Function
