@@ -2,19 +2,30 @@
 
 A set of functions for communicating with the OpenAI ChatGPT API in Microsoft Excel and perform various taasks. This was tested under the latest version of Microsoft Excel. Adjustments may be needed to run with older versions.
 
+# Update 3/10/2023
+
+Added ChatGPTQuerySelection() function.  Allows you to ask query ChatGPT about the data in a selection of cells.
+
+![ChatGPTQuerySelection Video](https://img.youtube.com/vi/VrmhIFKKYBA/0.jpg)
+(https://www.youtube.com/watch?v=VrmhIFKKYBA)
+
 # Update (3/9/2023)
 
 Added a ChatGPTList() function.  Pass in something you want a list of like in the video below, you can have the list output vertically and horizontally.
 
 ChatGPTList demo:
-![ChatGPTList Video](https://img.youtube.com/vi/bLxEHdxFb9k/0.jpg)(https://www.youtube.com/watch?v=bLxEHdxFb9k)
+
+![ChatGPTList Video](https://img.youtube.com/vi/bLxEHdxFb9k/0.jpg)
+(https://www.youtube.com/watch?v=bLxEHdxFb9k)
 
 # Update (3/8/2023)
 
 Added a ChatGPTQuickFill() function, you pass in the number of cells you want to look backward for on the fill (if the cells don't exist or are empty they are ignored).  No prompt engineering required, the prompt is engineered automatically.  
 
 Here's a demo video of the new Quick Fill:
-![ChatGPT Quick Fill Video](https://img.youtube.com/vi/t9rUA67DV0E/0.jpg)(https://www.youtube.com/watch?v=t9rUA67DV0E)
+
+![ChatGPT Quick Fill Video](https://img.youtube.com/vi/t9rUA67DV0E/0.jpg)
+(https://www.youtube.com/watch?v=t9rUA67DV0E)
 
 ## Demo
 
@@ -37,6 +48,8 @@ Prompt chatGPT in a cell by typing `=ChatGPT(prompt)`, where `prompt` is the tex
 Quick fill cells using ChatGPT without a prompt using `=ChatGPTQuickFill(optional titleCell, optional contextCell)` where title row and context row default to row 1, and column a.  A prompt will be automatically generated.
 
 Insert lists with ChatGPT using `=ChatGPTList(topic, optional horizontal)` The list will be created based on the passed in topic, by default the list will be placed vertically.  
+
+Query cells with ChatGPT Using `=ChatGPTQuerySelection(query, selection, optional isheader)` This allows you query a selection of cells, you can set isHeader to true and it will use the first row as topic headers.  Currently this uses JSON, but that may change or have another option because of higher token count.  ChatGPT though seems to work best with JSON data rather than other formats tested. 
 
 ## Troubleshooting
 
