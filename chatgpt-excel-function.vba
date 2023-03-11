@@ -232,3 +232,13 @@ Public Function ChatGPTQuerySelection(query As String, rng As Range, Optional is
     prompt = "Answer this query based on the given {JSON}. Be specific, especially about numbers. Assume the end client has no technical knowledge and is not looking at the data.  Do not mention anything about JSON or the format of the table. QUERY=" & query & "\nJSON=" & json
     ChatGPTQuerySelection = ChatGPT(prompt, True)
 End Function
+
+Public Function ChatGPTSummarize(rng As Range, Optional isHeader As Boolean = True) As String
+    Dim json As String
+    Dim prompt As String
+    
+    json = ExcelToJSON(rng, isHeader)
+
+    prompt = "Create a short summary paragraph of the following JSON in a personalized human voice. Be specific, especially about numbers. Assume the end client has no technical knowledge and is not looking at the data.  Do not mention anything about JSON or the format of the table. JSON=" & json
+    ChatGPTSummarize = ChatGPT(prompt, True)
+End Function

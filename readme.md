@@ -4,6 +4,11 @@ A set of functions for communicating with the OpenAI ChatGPT API in Microsoft Ex
 
 # Update 3/10/2023
 
+Added ChatGPTSummarize() function.  Writes a short summary paragraph about the data in a selection of cells.
+![ChatGPTSummarize Video](https://img.youtube.com/vi/i9MPDIbnErI/0.jpg)
+(https://www.youtube.com/watch?v=i9MPDIbnErI)
+
+
 Added ChatGPTQuerySelection() function.  Allows you to ask query ChatGPT about the data in a selection of cells.
 
 ![ChatGPTQuerySelection Video](https://img.youtube.com/vi/VrmhIFKKYBA/0.jpg)
@@ -50,6 +55,8 @@ Quick fill cells using ChatGPT without a prompt using `=ChatGPTQuickFill(optiona
 Insert lists with ChatGPT using `=ChatGPTList(topic, optional horizontal)` The list will be created based on the passed in topic, by default the list will be placed vertically.  
 
 Query cells with ChatGPT Using `=ChatGPTQuerySelection(query, selection, optional isheader)` This allows you query a selection of cells, you can set isHeader to true and it will use the first row as topic headers.  Currently this uses JSON, but that may change or have another option because of higher token count.  ChatGPT though seems to work best with JSON data rather than other formats tested. 
+
+Summarize cells with ChatGPTUsing `=ChatGPTSummarizeSelection(selection, optional isheader)` This allows you to summarize a selection of cells.  Set isHeader true to use the first row to identify variable in the JSON that is passed to ChatGPT.
 
 ## Troubleshooting
 
