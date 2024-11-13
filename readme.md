@@ -76,4 +76,4 @@ The authors and contributors of this program provide it as-is, without any warra
 This program is licensed under the MIT license.
 
 ## Author
-Johann Dowa
+Johann Dowa (John)
