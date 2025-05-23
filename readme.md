@@ -44,7 +44,7 @@ These instructions may only apply to recent versions of Microsoft Windows. You w
 2. Click on the "Visual Basic" button.
 3. In the "Microsoft Visual Basic for Applications" window, click on "Insert" and then "Module".
 4. Replace the existing code with the code in the "chatgpt-excel-function.vba" file.
-5. Replace `sk-YOUR-CHATGPT-KEY-HERE` with your own OpenAI API key.
+5. **IMPORTANT:** Replace `sk-YOUR-CHATGPT-KEY-HERE` with your own OpenAI API key. This step is required for the functions to work properly. If you don't replace this placeholder with your actual API key, you will get a "#VALUE!" error in Excel.
 
 ## Usage
 
@@ -59,6 +59,8 @@ Query cells with ChatGPT Using `=ChatGPTQuerySelection(query, selection, optiona
 Summarize cells with ChatGPTUsing `=ChatGPTSummarizeSelection(selection, optional isheader)` This allows you to summarize a selection of cells.  Set isHeader true to use the first row to identify variable in the JSON that is passed to ChatGPT.
 
 ## Troubleshooting
+
+If you receive a "#VALUE!" error in Excel when using any of the ChatGPT functions, the most common cause is that you have not replaced the placeholder API key. Please make sure you replace `sk-YOUR-CHATGPT-KEY-HERE` with your actual OpenAI API key in the VBA code.
 
 If you receive an error related to `WinHttp.WinHttpRequest.5.1`, it means that the `WinHttp` library is not registered on your computer. To resolve this issue, you can try re-registering the library by running the following command in an elevated command prompt:
 
