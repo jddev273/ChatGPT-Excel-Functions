@@ -33,6 +33,34 @@ Function UnescapeString(ByVal str As String) As String
     UnescapeString = output
 End Function
 
+Private Function UTF8ToVBAString(responseBody As Variant) As String
+    ' Convert UTF-8 byte array to VBA string using ADODB.Stream
+    Dim stream As Object
+    Set stream = CreateObject("ADODB.Stream")
+    
+    On Error GoTo ErrorHandler
+    
+    stream.Type = 1 ' adTypeBinary
+    stream.Open
+    stream.Write responseBody
+    stream.Position = 0
+    stream.Type = 2 ' adTypeText
+    stream.Charset = "UTF-8"
+    
+    UTF8ToVBAString = stream.ReadText
+    stream.Close
+    Set stream = Nothing
+    Exit Function
+    
+ErrorHandler:
+    ' If UTF-8 decoding fails, fall back to treating as regular text
+    If Not stream Is Nothing Then
+        stream.Close
+        Set stream = Nothing
+    End If
+    ' Convert byte array to string manually as fallback
+    UTF8ToVBAString = StrConv(responseBody, vbUnicode)
+End Function
 
 Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) As String
     Dim apiUrl As String
@@ -44,6 +72,8 @@ Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) A
     Dim model As String
     Dim temperature As String
     Dim maxTokens As String
+    Dim startPos As Long
+    Dim endPos As Long
     
     apiUrl = "https://api.openai.com/v1/chat/completions"
     apiKey = "sk-YOUR-CHATGPT-KEY-HERE"
@@ -72,7 +102,7 @@ Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) A
     If httpRequest.Status <> 200 Then
         GetChatGPTResponse = "Error: " & httpRequest.Status & " " & httpRequest.StatusText
     Else
-        responseText = httpRequest.responseText
+        responseText = UTF8ToVBAString(httpRequest.responseBody)
         startPos = InStr(responseText, """content""") + 12
         endPos = InStr(startPos, responseText, """logprobs""") - 14
         GetChatGPTResponse = Trim(UnescapeString(Mid(responseText, startPos, endPos - startPos + 1)))
