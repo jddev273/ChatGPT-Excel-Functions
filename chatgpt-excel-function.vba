@@ -48,6 +48,12 @@ Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) A
     apiUrl = "https://api.openai.com/v1/chat/completions"
     apiKey = "sk-YOUR-CHATGPT-KEY-HERE"
     
+    ' Check if the API key is still the default placeholder
+    If apiKey = "sk-YOUR-CHATGPT-KEY-HERE" Then
+        GetChatGPTResponse = "Error: Please replace 'sk-YOUR-CHATGPT-KEY-HERE' with your actual OpenAI API key in the VBA code"
+        Exit Function
+    End If
+    
     model = "gpt-3.5-turbo"
     temperature = "0.5"
     maxTokens = 50
