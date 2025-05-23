@@ -73,8 +73,8 @@ Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) A
         GetChatGPTResponse = "Error: " & httpRequest.Status & " " & httpRequest.StatusText
     Else
         responseText = httpRequest.responseText
-        startPos = InStr(responseText, """content"":""") + 11
-        endPos = InStr(responseText, """},""") - 1
+        startPos = InStr(responseText, """content""") + 12
+        endPos = InStr(startPos, responseText, """logprobs""") - 14
         GetChatGPTResponse = Trim(UnescapeString(Mid(responseText, startPos, endPos - startPos + 1)))
     End If
     
