@@ -1,7 +1,7 @@
 ' This is a set of functions that will allow you to communicate with the ChatGPT API within an Excel cell
 '
 'Just copy/paste this function into Excel following instructions in the Readme.md file.
-' Don't forget to change the API key to your own.
+' IMPORTANT: You MUST change the API key to your own or you will get a #VALUE! error.
 ' Author: Johann Dowa
 ' http://github.com/jddev273/chatgpt-excel-function
 Function UnescapeString(ByVal str As String) As String
@@ -79,9 +79,20 @@ Private Function GetChatGPTResponse(prompt As String, encodeString As Boolean) A
         GetChatGPTResponse = "Error: " & httpRequest.Status & " " & httpRequest.StatusText
     Else
         responseText = httpRequest.responseText
-        startPos = InStr(responseText, """content""") + 12
-        endPos = InStr(startPos, responseText, """logprobs""") - 14
-        GetChatGPTResponse = Trim(UnescapeString(Mid(responseText, startPos, endPos - startPos + 1)))
+        On Error Resume Next
+        startPos = InStr(responseText, """content"":""") + 11
+        If startPos > 11 Then
+            Dim quotePos As Long
+            quotePos = InStr(startPos, responseText, """", InStr(startPos, responseText, Chr(34)) + 1)
+            If quotePos > 0 Then
+                GetChatGPTResponse = Trim(UnescapeString(Mid(responseText, startPos, quotePos - startPos)))
+            Else
+                GetChatGPTResponse = "Error: Unable to parse API response - content format unexpected"
+            End If
+        Else
+            GetChatGPTResponse = "Error: Unable to parse API response - content field not found"
+        End If
+        On Error GoTo 0
     End If
     
     Set httpRequest = Nothing
